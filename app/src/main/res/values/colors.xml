@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#FFF5F5F5</color>
+    <color name="hint">#FF7F7F7F</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="divider">#FFBDBDBD</color>
+    <color name="gray">#FF9E9E9E</color>
+
+
+    <color name="main">#FFFFFFFF</color>
+    <color name="actionBackground">#FFFFFFFF</color>
+    <color name="actionTextColor">#FF212121</color>
+    <color name="pickerColor">#FF212121</color>
+    <color name="pickedColor">#FFF44336</color>
+    <color name="tachometerBackground">#FFE1E0E2</color>
+
+    <color name="primary">#212121</color>
+    <color name="secondary">#757575</color>
+</resources>

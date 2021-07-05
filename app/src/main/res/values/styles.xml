@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ScaffoldTheme" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="dialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="toolbarTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/actionBackground</item>
+        <item name="android:textColorPrimary">@color/actionTextColor</item>
+        <item name="actionMenuTextColor">@color/actionTextColor</item>
+        <item name="colorButtonNormal">@color/actionTextColor</item>
+        <item name="colorControlNormal">@color/actionTextColor</item>
+    </style>
+
+    <style name="toolbarTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/actionTextSize</item>
+    </style>
+
+    <style name="toolbarPopupTheme" parent="@style/Theme.AppCompat">
+        <item name="android:colorBackground">@color/actionBackground</item>
+        <item name="overlapAnchor">false</item>
+    </style>
+
+</resources>

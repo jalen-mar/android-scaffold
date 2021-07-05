@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_marginTop="1dp"
+    android:layout_height="wrap_content">
+
+    <TextView android:text="佳木斯"
+        android:textSize="@dimen/text"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:gravity="center_vertical"
+        android:id="@+id/item_picker_value"
+        android:textColor="@drawable/selector_text_color_red"
+        android:paddingLeft="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+</FrameLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#45000000">
+
+    <View android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:id="@+id/closer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/no" />
+
+    <EditText android:background="@color/white"
+        android:hint="请输入关键字"
+        android:id="@+id/keyword"
+        android:textColor="@color/pickerColor"
+        android:textSize="@dimen/text"
+        android:visibility="gone"
+        android:textColorHint="@color/hint"
+        android:padding="@dimen/padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View android:background="@color/background"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="40dp">
+
+        <HorizontalScrollView android:layout_width="@dimen/no"
+            android:layout_weight="1"
+            android:elevation="5dp"
+            android:id="@+id/scroll_layout"
+            android:scrollbars="none"
+            android:layout_height="match_parent">
+
+            <LinearLayout android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:paddingRight="@dimen/padding"
+                android:id="@+id/picker_toolbar"
+                android:layout_height="match_parent" />
+
+        </HorizontalScrollView>
+
+        <TextView android:text="确定"
+            android:id="@+id/submit"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            android:textColor="@color/pickedColor"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:background="@color/background"
+        android:layout_height="240dp"
+        android:id="@+id/list"/>
+
+</LinearLayout>

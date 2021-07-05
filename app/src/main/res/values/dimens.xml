@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="subject">18dp</dimen>
+    <dimen name="title">16dp</dimen>
+    <dimen name="text">14dp</dimen>
+    <dimen name="note">12dp</dimen>
+
+
+    <dimen name="no">0dp</dimen>
+    <dimen name="padding">12dp</dimen>
+
+
+    <dimen name="actionTextSize">17dp</dimen>
+</resources>
