@@ -23,6 +23,7 @@ public class MD5Util {
     public static String encode(byte[] msg, boolean isUpper) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(msg);
             return TranslateUtil.byteArrayToString(digest.digest(), isUpper);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
