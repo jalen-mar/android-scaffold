@@ -3,6 +3,8 @@ package com.jalen.android.scaffold.util;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
@@ -28,6 +30,32 @@ public class AppUtil {
             }
         }
         return applicationContext;
+    }
+
+    public static int getVersionCode(Context context) {
+        int version;
+        PackageManager manager = context.getPackageManager();
+        try {
+            PackageInfo info = manager.getPackageInfo(
+                    context.getPackageName(),0);
+            version = info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            version = 0;
+        }
+        return version;
+    }
+
+    public static String getVersionName(Context context) {
+        String versionName;
+        PackageManager manager = context.getPackageManager();
+        try {
+            PackageInfo packInfo = manager.getPackageInfo(
+                    context.getPackageName(),0);
+            versionName = packInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            versionName = "";
+        }
+        return versionName;
     }
 
     public static String getSimOperatorName(){

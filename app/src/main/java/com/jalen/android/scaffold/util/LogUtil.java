@@ -2,11 +2,15 @@ package com.jalen.android.scaffold.util;
 
 import android.util.Log;
 
-import com.jalen.android.scaffold.BuildConfig;
-
 public class LogUtil {
+    private static boolean isDebug;
+
+    public static void init(boolean debug) {
+        isDebug = debug;
+    }
+
     public static void i(String tag, String message) {
-        if (BuildConfig.BUILD_TYPE != "release") {
+        if (isDebug) {
             StringBuilder msg = new StringBuilder(message == null ? "" : message);
             int segmentSize = 3 * 1024;
             if (msg.length() > segmentSize) {
