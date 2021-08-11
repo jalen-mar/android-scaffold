@@ -28,9 +28,9 @@ public class Base64Util {
 
             if (i <= 25) {
                 lookUpBase64Alphabet[i] = (char) ('A' + i);
-            } if (i <= 51) {
+            } else if (i <= 51) {
                 lookUpBase64Alphabet[i] = (char) ('a' + i - 26);
-            }  if (i < LOOKUPLENGTH){
+            } else  if (i < LOOKUPLENGTH){
                 lookUpBase64Alphabet[i] = (char) ('0' + i - 52);
             }
         }
