@@ -1,4 +1,4 @@
-package com.jalen.android.magnus.vm;
+package com.jalen.android.scaffold.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -279,6 +280,312 @@ public class WifiUtil {
             return 2;
         } else {
             return var0.contains("WEP") ? 3 : 4;
+        }
+    }
+
+    public static boolean addNetWork(WifiConfiguration var0, Context var1) {
+        WifiManager var6 = (WifiManager)var1.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo var4 = var6.getConnectionInfo();
+        if (var4 != null) {
+            var6.disableNetwork(var4.getNetworkId());
+        }
+
+        boolean var3;
+        if (var0.networkId > 0) {
+            var3 = var6.enableNetwork(var0.networkId, true);
+            var6.updateNetwork(var0);
+        } else {
+            int var2 = var6.addNetwork(var0);
+            var3 = false;
+            if (var2 > 0) {
+                var6.saveConfiguration();
+                return var6.enableNetwork(var2, true);
+            }
+        }
+
+        StringBuilder var5 = new StringBuilder();
+        var5.append("addNetWork: ");
+        var5.append(var3);
+        Log.i("WifiSupport", var5.toString());
+        return var3;
+    }
+
+    public static void closeWifi(Context var0) {
+        WifiManager var1 = (WifiManager)var0.getSystemService(Context.WIFI_SERVICE);
+        if (var1.isWifiEnabled()) {
+            var1.setWifiEnabled(false);
+        }
+
+    }
+
+    public static boolean containName(List<ScanResult> var0, String var1) {
+        Iterator var3 = var0.iterator();
+
+        ScanResult var2;
+        do {
+            if (!var3.hasNext()) {
+                return false;
+            }
+
+            var2 = (ScanResult)var3.next();
+        } while(TextUtils.isEmpty(var2.SSID) || !var2.SSID.equals(var1));
+
+        return true;
+    }
+
+    public static WifiConfiguration createWifiConfig(String var0, String var1, com.jalen.android.magnus.vm.WifiUtil.WifiCipherType var2) {
+        WifiConfiguration var3 = new WifiConfiguration();
+        var3.allowedAuthAlgorithms.clear();
+        var3.allowedGroupCiphers.clear();
+        var3.allowedKeyManagement.clear();
+        var3.allowedPairwiseCiphers.clear();
+        var3.allowedProtocols.clear();
+        StringBuilder var4 = new StringBuilder();
+        var4.append("\"");
+        var4.append(var0);
+        var4.append("\"");
+        var3.SSID = var4.toString();
+        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_NOPASS) {
+            var3.allowedKeyManagement.set(0);
+        }
+
+        StringBuilder var5;
+        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WEP) {
+            var5 = new StringBuilder();
+            var5.append("\"");
+            var5.append(var1);
+            var5.append("\"");
+            var3.preSharedKey = var5.toString();
+            var3.hiddenSSID = true;
+            var3.allowedAuthAlgorithms.set(0);
+            var3.allowedGroupCiphers.set(3);
+            var3.allowedGroupCiphers.set(2);
+            var3.allowedGroupCiphers.set(0);
+            var3.allowedGroupCiphers.set(1);
+            var3.allowedKeyManagement.set(0);
+            var3.wepTxKeyIndex = 0;
+        }
+
+        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WPA) {
+            var5 = new StringBuilder();
+            var5.append("\"");
+            var5.append(var1);
+            var5.append("\"");
+            var3.preSharedKey = var5.toString();
+            var3.hiddenSSID = true;
+            var3.allowedAuthAlgorithms.set(0);
+            var3.allowedGroupCiphers.set(2);
+            var3.allowedGroupCiphers.set(3);
+            var3.allowedKeyManagement.set(1);
+            var3.allowedPairwiseCiphers.set(1);
+            var3.allowedPairwiseCiphers.set(2);
+            var3.status = 2;
+        }
+
+        return var3;
+    }
+
+    public static String getCapabilitiesString(String var0) {
+        if (var0.contains("WEP")) {
+            return "WEP";
+        } else {
+            return !var0.contains("WPA") && !var0.contains("WPA2") && !var0.contains("WPS") ? "OPEN" : "WPA/WPA2";
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    public static List getConfigurations(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).getConfiguredNetworks();
+    }
+
+    public static WifiInfo getConnectedWifiInfo(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo();
+    }
+
+    public static boolean getIsWifiEnabled(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled();
+    }
+
+    public static int getLevel(int var0) {
+        if (Math.abs(var0) < 50) {
+            return 1;
+        } else if (Math.abs(var0) < 75) {
+            return 2;
+        } else {
+            return Math.abs(var0) < 90 ? 3 : 4;
+        }
+    }
+
+    public static void getReplace(Context var0, List<com.jalen.android.magnus.vm.WifiUtil.WifiStatus> var1) {
+        WifiInfo var5 = getConnectedWifiInfo(var0);
+        ArrayList var3 = new ArrayList();
+        var3.addAll(var1);
+
+        for(int var2 = 0; var2 < var1.size(); ++var2) {
+            StringBuilder var4 = new StringBuilder();
+            var4.append("\"");
+            var4.append(((com.jalen.android.magnus.vm.WifiUtil.WifiStatus)var1.get(var2)).getWifiName());
+            var4.append("\"");
+            if (var4.toString().equals(var5.getSSID())) {
+                var3.add(0, var1.get(var2));
+                var3.remove(var2 + 1);
+                ((com.jalen.android.magnus.vm.WifiUtil.WifiStatus)var3.get(0)).setState("已连接");
+            }
+        }
+
+        var1.clear();
+        var1.addAll(var3);
+    }
+
+    public static String getStringId(int var0) {
+        StringBuffer var1 = new StringBuffer();
+        StringBuilder var2 = new StringBuilder();
+        var2.append(var0 >> 0 & 255);
+        var2.append(".");
+        var1.append(var2.toString());
+        var2 = new StringBuilder();
+        var2.append(var0 >> 8 & 255);
+        var2.append(".");
+        var1.append(var2.toString());
+        var2 = new StringBuilder();
+        var2.append(var0 >> 16 & 255);
+        var2.append(".");
+        var1.append(var2.toString());
+        var1.append(var0 >> 24 & 255);
+        return var1.toString();
+    }
+
+    public static com.jalen.android.magnus.vm.WifiUtil.WifiCipherType getWifiCipher(String var0) {
+        if (var0.isEmpty()) {
+            return com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_INVALID;
+        } else if (var0.contains("WEP")) {
+            return com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WEP;
+        } else {
+            return !var0.contains("WPA") && !var0.contains("WPA2") && !var0.contains("WPS") ? com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_NOPASS : com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WPA;
+        }
+    }
+
+    public static List<ScanResult> getWifiScanResult(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).getScanResults();
+    }
+
+    @SuppressLint("MissingPermission")
+    public static WifiConfiguration isExsits(String var0, Context var1) {
+        List var5 = ((WifiManager)var1.getSystemService(Context.WIFI_SERVICE)).getConfiguredNetworks();
+        if (var5 != null) {
+            Iterator var6 = var5.iterator();
+
+            while(var6.hasNext()) {
+                WifiConfiguration var2 = (WifiConfiguration)var6.next();
+                String var3 = var2.SSID;
+                StringBuilder var4 = new StringBuilder();
+                var4.append("\"");
+                var4.append(var0);
+                var4.append("\"");
+                if (var3.equals(var4.toString())) {
+                    return var2;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean isOpenWifi(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled();
+    }
+
+    public static boolean isWifiEnable(Context var0) {
+        return ((WifiManager)var0.getSystemService(Context.WIFI_SERVICE)).isWifiEnabled();
+    }
+
+    public static List<ScanResult> noSameName(List<ScanResult> var0) {
+        ArrayList var1 = new ArrayList();
+        Iterator var3 = var0.iterator();
+
+        while(var3.hasNext()) {
+            ScanResult var2 = (ScanResult)var3.next();
+            if (!TextUtils.isEmpty(var2.SSID) && !containName(var1, var2.SSID)) {
+                var1.add(var2);
+            }
+        }
+
+        return var1;
+    }
+
+    public static void openWifi(Context var0) {
+        WifiManager var1 = (WifiManager)var0.getSystemService(Context.WIFI_SERVICE);
+        if (!var1.isWifiEnabled()) {
+            var1.setWifiEnabled(true);
+        }
+
+    }
+
+    public static enum WifiCipherType {
+        WIFICIPHER_INVALID,
+        WIFICIPHER_NOPASS,
+        WIFICIPHER_WEP,
+        WIFICIPHER_WPA;
+    }
+
+    public static class WifiStatus {
+        private String capabilities;
+        private String level;
+        private String state;
+        private String wifiName;
+
+        public int compareTo(com.jalen.android.magnus.vm.WifiUtil.WifiStatus var1) {
+            return Integer.parseInt(this.getLevel()) - Integer.parseInt(var1.getLevel());
+        }
+
+        public String getCapabilities() {
+            return this.capabilities;
+        }
+
+        public String getLevel() {
+            return this.level;
+        }
+
+        public String getState() {
+            return this.state;
+        }
+
+        public String getWifiName() {
+            return this.wifiName;
+        }
+
+        public void setCapabilities(String var1) {
+            this.capabilities = var1;
+        }
+
+        public void setLevel(String var1) {
+            this.level = var1;
+        }
+
+        public void setState(String var1) {
+            this.state = var1;
+        }
+
+        public void setWifiName(String var1) {
+            this.wifiName = var1;
+        }
+
+        public String toString() {
+            StringBuilder var1 = new StringBuilder();
+            var1.append("WifiBean{wifiName='");
+            var1.append(this.wifiName);
+            var1.append('\'');
+            var1.append(", level='");
+            var1.append(this.level);
+            var1.append('\'');
+            var1.append(", state='");
+            var1.append(this.state);
+            var1.append('\'');
+            var1.append(", capabilities='");
+            var1.append(this.capabilities);
+            var1.append('\'');
+            var1.append('}');
+            return var1.toString();
         }
     }
 }
