@@ -1,5 +1,8 @@
 package com.jalen.android.scaffold.util.code;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 public class Base64Util {
     private static Base64Util base64 = new Base64Util();
 
@@ -40,12 +43,20 @@ public class Base64Util {
         lookUpBase64Alphabet[63] = (char) '/';
     }
 
-    public static String encode(byte[] binaryData) {
-        if (binaryData == null) {
+    public static String encode(String message) {
+        return encode(message, Charset.defaultCharset());
+    }
+
+    public static String encode(String message, Charset charset) {
+        return encode(message.getBytes(charset));
+    }
+
+    public static String encode(byte[] message) {
+        if (message == null) {
             return null;
         }
 
-        int lengthDataBits = binaryData.length * base64.EIGHTBIT;
+        int lengthDataBits = message.length * base64.EIGHTBIT;
         if (lengthDataBits == 0) {
             return "";
         }
@@ -61,9 +72,9 @@ public class Base64Util {
         int encodedIndex = 0;
         int dataIndex = 0;
         for (int i = 0; i < numberTriplets; i++) {
-            b1 = binaryData[dataIndex++];
-            b2 = binaryData[dataIndex++];
-            b3 = binaryData[dataIndex++];
+            b1 = message[dataIndex++];
+            b2 = message[dataIndex++];
+            b3 = message[dataIndex++];
 
             l = (byte) (b2 & 0x0f);
             k = (byte) (b1 & 0x03);
@@ -79,7 +90,7 @@ public class Base64Util {
         }
 
         if (fewerThan24bits == base64.EIGHTBIT) {
-            b1 = binaryData[dataIndex];
+            b1 = message[dataIndex];
             k = (byte) (b1 & 0x03);
             byte val1 = ((b1 & base64.SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
             encodedData[encodedIndex++] = base64.lookUpBase64Alphabet[val1];
@@ -87,8 +98,8 @@ public class Base64Util {
             encodedData[encodedIndex++] = base64.PAD;
             encodedData[encodedIndex++] = base64.PAD;
         } else if (fewerThan24bits == base64.SIXTEENBIT) {
-            b1 = binaryData[dataIndex];
-            b2 = binaryData[dataIndex + 1];
+            b1 = message[dataIndex];
+            b2 = message[dataIndex + 1];
             l = (byte) (b2 & 0x0f);
             k = (byte) (b1 & 0x03);
 
@@ -205,8 +216,6 @@ public class Base64Util {
         if (data == null) {
             return 0;
         }
-
-        // count characters that's not whitespace
         int newSize = 0;
         int len = data.length;
         for (int i = 0; i < len; i++) {
