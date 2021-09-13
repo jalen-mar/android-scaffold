@@ -333,7 +333,7 @@ public class WifiUtil {
         return true;
     }
 
-    public static WifiConfiguration createWifiConfig(String var0, String var1, com.jalen.android.magnus.vm.WifiUtil.WifiCipherType var2) {
+    public static WifiConfiguration createWifiConfig(String var0, String var1, WifiUtil.WifiCipherType var2) {
         WifiConfiguration var3 = new WifiConfiguration();
         var3.allowedAuthAlgorithms.clear();
         var3.allowedGroupCiphers.clear();
@@ -345,12 +345,12 @@ public class WifiUtil {
         var4.append(var0);
         var4.append("\"");
         var3.SSID = var4.toString();
-        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_NOPASS) {
+        if (var2 == WifiUtil.WifiCipherType.WIFICIPHER_NOPASS) {
             var3.allowedKeyManagement.set(0);
         }
 
         StringBuilder var5;
-        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WEP) {
+        if (var2 == WifiUtil.WifiCipherType.WIFICIPHER_WEP) {
             var5 = new StringBuilder();
             var5.append("\"");
             var5.append(var1);
@@ -366,7 +366,7 @@ public class WifiUtil {
             var3.wepTxKeyIndex = 0;
         }
 
-        if (var2 == com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WPA) {
+        if (var2 == WifiUtil.WifiCipherType.WIFICIPHER_WPA) {
             var5 = new StringBuilder();
             var5.append("\"");
             var5.append(var1);
@@ -416,7 +416,7 @@ public class WifiUtil {
         }
     }
 
-    public static void getReplace(Context var0, List<com.jalen.android.magnus.vm.WifiUtil.WifiStatus> var1) {
+    public static void getReplace(Context var0, List<WifiUtil.WifiStatus> var1) {
         WifiInfo var5 = getConnectedWifiInfo(var0);
         ArrayList var3 = new ArrayList();
         var3.addAll(var1);
@@ -424,12 +424,12 @@ public class WifiUtil {
         for(int var2 = 0; var2 < var1.size(); ++var2) {
             StringBuilder var4 = new StringBuilder();
             var4.append("\"");
-            var4.append(((com.jalen.android.magnus.vm.WifiUtil.WifiStatus)var1.get(var2)).getWifiName());
+            var4.append(((WifiUtil.WifiStatus)var1.get(var2)).getWifiName());
             var4.append("\"");
             if (var4.toString().equals(var5.getSSID())) {
                 var3.add(0, var1.get(var2));
                 var3.remove(var2 + 1);
-                ((com.jalen.android.magnus.vm.WifiUtil.WifiStatus)var3.get(0)).setState("已连接");
+                ((WifiUtil.WifiStatus)var3.get(0)).setStatus(1);
             }
         }
 
@@ -455,13 +455,13 @@ public class WifiUtil {
         return var1.toString();
     }
 
-    public static com.jalen.android.magnus.vm.WifiUtil.WifiCipherType getWifiCipher(String var0) {
+    public static WifiUtil.WifiCipherType getWifiCipher(String var0) {
         if (var0.isEmpty()) {
-            return com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_INVALID;
+            return WifiUtil.WifiCipherType.WIFICIPHER_INVALID;
         } else if (var0.contains("WEP")) {
-            return com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WEP;
+            return WifiUtil.WifiCipherType.WIFICIPHER_WEP;
         } else {
-            return !var0.contains("WPA") && !var0.contains("WPA2") && !var0.contains("WPS") ? com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_NOPASS : com.jalen.android.magnus.vm.WifiUtil.WifiCipherType.WIFICIPHER_WPA;
+            return !var0.contains("WPA") && !var0.contains("WPA2") && !var0.contains("WPS") ? WifiUtil.WifiCipherType.WIFICIPHER_NOPASS : WifiUtil.WifiCipherType.WIFICIPHER_WPA;
         }
     }
 
@@ -531,10 +531,10 @@ public class WifiUtil {
     public static class WifiStatus {
         private String capabilities;
         private String level;
-        private String state;
+        private int status;
         private String wifiName;
 
-        public int compareTo(com.jalen.android.magnus.vm.WifiUtil.WifiStatus var1) {
+        public int compareTo(WifiUtil.WifiStatus var1) {
             return Integer.parseInt(this.getLevel()) - Integer.parseInt(var1.getLevel());
         }
 
@@ -546,8 +546,8 @@ public class WifiUtil {
             return this.level;
         }
 
-        public String getState() {
-            return this.state;
+        public int getStatus() {
+            return status;
         }
 
         public String getWifiName() {
@@ -562,8 +562,8 @@ public class WifiUtil {
             this.level = var1;
         }
 
-        public void setState(String var1) {
-            this.state = var1;
+        public void setStatus(int status) {
+            this.status = status;
         }
 
         public void setWifiName(String var1) {
@@ -579,7 +579,7 @@ public class WifiUtil {
             var1.append(this.level);
             var1.append('\'');
             var1.append(", state='");
-            var1.append(this.state);
+            var1.append(this.status == 1? "已连接" : (this.status == 0 ? "未连接" : "连接中"));
             var1.append('\'');
             var1.append(", capabilities='");
             var1.append(this.capabilities);
