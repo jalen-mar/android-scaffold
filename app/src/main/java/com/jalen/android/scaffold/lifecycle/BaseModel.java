@@ -83,8 +83,10 @@ public class BaseModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        for (LifeObject object : lifeObjects) {
-            object.destroy();
+        if (lifeObjects != null) {
+            for (LifeObject object : lifeObjects) {
+                object.destroy();
+            }
         }
         lifeObjects = null;
     }
